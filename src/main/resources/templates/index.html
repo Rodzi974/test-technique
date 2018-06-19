@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Index</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link href="/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="/jquery/jquery-3.3.1.min.js"></script>
+	<script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+	<script src="/index.js"></script>
+</head>
+<body class="container">
+	<div class="row">
+		<div class="col-md-offset-2 col-md-8 col-md-offset-2">
+			<table th:each="panier : ${paniers}" class="table table-bordered table-striped">
+				<caption th:text="${panier.libelle}" class="text-center"></caption>
+				<thead>
+					<tr>
+						<th>Libell&eacute;</th>
+						<th>Prix Unitaire HT</th>
+						<th>Quantit&eacute;</th>
+						<th>Taxe(s)</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<td colspan="5"><button class="btn btn-primary" th:attr="data-panier-id=${panier.id}">Calculer Facture</button></td>
+					</tr>
+				</tfoot>
+				<tr th:each="produit : ${panier.produits}">
+					<td th:text="${produit.libelle}"></td>
+					<td th:text="${produit.prix}"></td>
+					<td th:text="${produit.quantite}"></td>
+					<td th:if="!${#lists.isEmpty(produit.taxes)}">
+						<span th:each="taxe, iterStat : ${produit.taxes}" th:text="!${iterStat.last} ? ${taxe.libelle} + ', ' : ${taxe.libelle}"></span>
+					</td>
+					<td th:if="${#lists.isEmpty(produit.taxes)}">
+						<span>--</span>
+					</td>
+					<td><button class="btn btn-primary" th:attr="data-produit-id=${produit.id}">Calculer Taxe</button></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
